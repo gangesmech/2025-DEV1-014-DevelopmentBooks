@@ -19,7 +19,4 @@ class ShoppingBasketTest {
         basket.add(new Book("Clean Code"));
         assertEquals(BOOK_PRICE, basket.calculate());
     }
-
-    record Book(String title) {
-    }
 }
