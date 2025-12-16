@@ -50,6 +50,20 @@ class ShoppingBasketTest {
         assertEquals(145.0, basket.calculate());
     }
 
+    @Test
+    void optimalDiscountForMultipleSets() {
+        var basket = new ShoppingBasket();
+        basket.add(new Book(BOOKS[0]));
+        basket.add(new Book(BOOKS[0]));
+        basket.add(new Book(BOOKS[1]));
+        basket.add(new Book(BOOKS[1]));
+        basket.add(new Book(BOOKS[2]));
+        basket.add(new Book(BOOKS[2]));
+        basket.add(new Book(BOOKS[3]));
+        basket.add(new Book(BOOKS[4]));
+        assertEquals(320.0, basket.calculate());
+    }
+
     @ParameterizedTest
     @MethodSource("provideBookCountsAndExpectedPrices")
     void distinctBooksReceiveDiscounts(int distinctBooksCount, double expectedPrice) {
