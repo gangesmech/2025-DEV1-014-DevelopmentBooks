@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class ShoppingBasket {
     private final List<Book> books = new ArrayList<>();
+    private static final double BOOK_PRICE = 50.0;
     private static final Map<Integer, Double> DISCOUNTS = Map.of(
             2, 0.05,
             3, 0.10,
@@ -19,6 +20,8 @@ public class ShoppingBasket {
     public double calculate() {
         var distinctBooksCount = (int) books.stream().map(Book::title).distinct().count();
         var discount = DISCOUNTS.getOrDefault(distinctBooksCount, 0.0);
-        return books.size() * 50.0 * (1.0 - discount);
+        var discountedPrice = distinctBooksCount * BOOK_PRICE * (1.0 - discount);
+        var remainingBooksCount = books.size() - distinctBooksCount;
+        return discountedPrice + (remainingBooksCount * BOOK_PRICE);
     }
 }
