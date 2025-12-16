@@ -1,7 +1,11 @@
 package com.bnppf.kata.developmentbooks;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class ShoppingBasket {
     private final Map<Book, Integer> bookQuantities = new HashMap<>();
@@ -17,11 +21,37 @@ public class ShoppingBasket {
     }
 
     public double calculate() {
-        var distinctBooksCount = bookQuantities.size();
-        var discount = DISCOUNTS.getOrDefault(distinctBooksCount, 0.0);
-        var discountedPrice = distinctBooksCount * BOOK_PRICE * (1.0 - discount);
-        var totalBooksCount = bookQuantities.values().stream().mapToInt(Integer::intValue).sum();
-        var remainingBooksCount = totalBooksCount - distinctBooksCount;
-        return discountedPrice + (remainingBooksCount * BOOK_PRICE);
+        if (bookQuantities.isEmpty()) {
+            return 0.0;
+        }
+        return calculateLowestPricePossible(new ArrayList<>(bookQuantities.values()));
+    }
+
+    private double calculateLowestPricePossible(List<Integer> countsOfEachBook) {
+        countsOfEachBook.removeIf(count -> count == 0);
+
+        if (countsOfEachBook.isEmpty()) {
+            return 0.0;
+        }
+
+        countsOfEachBook.sort(Collections.reverseOrder());
+
+        int numberOfDifferentBooksAvailable = countsOfEachBook.size();
+        return IntStream.rangeClosed(1, numberOfDifferentBooksAvailable)
+                .mapToDouble(sizeOfDiscountedSet -> calculatePriceForSet(sizeOfDiscountedSet, countsOfEachBook))
+                .min()
+                .orElse(0.0);
+    }
+
+    private double calculatePriceForSet(int sizeOfDiscountedSet, List<Integer> countsOfEachBook) {
+        ArrayList<Integer> remainingBookCountsAfterSetRemoval = new ArrayList<>(countsOfEachBook);
+
+        IntStream.range(0, sizeOfDiscountedSet)
+                .forEach(index -> remainingBookCountsAfterSetRemoval.set(index,
+                        remainingBookCountsAfterSetRemoval.get(index) - 1));
+
+        double discountPercentage = DISCOUNTS.getOrDefault(sizeOfDiscountedSet, 0.0);
+        double priceForCurrentSet = sizeOfDiscountedSet * BOOK_PRICE * (1.0 - discountPercentage);
+        return priceForCurrentSet + calculateLowestPricePossible(remainingBookCountsAfterSetRemoval);
     }
 }
