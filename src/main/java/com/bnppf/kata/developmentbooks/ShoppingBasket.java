@@ -11,6 +11,9 @@ public class ShoppingBasket {
     }
 
     public double calculate() {
+        if (books.size() == 2 && books.stream().map(Book::title).distinct().count() == 2) {
+            return books.size() * 50.0 * 0.95;
+        }
         return books.size() * 50.0;
     }
 }
