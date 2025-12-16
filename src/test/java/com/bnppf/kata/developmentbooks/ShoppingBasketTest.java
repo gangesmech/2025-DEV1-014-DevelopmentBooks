@@ -41,6 +41,15 @@ class ShoppingBasketTest {
         assertEquals(95.0, basket.calculate());
     }
 
+    @Test
+    void twoDuplicateAndOneUniqueBook() {
+        var basket = new ShoppingBasket();
+        basket.add(new Book(BOOKS[0]));
+        basket.add(new Book(BOOKS[1]));
+        basket.add(new Book(BOOKS[0]));
+        assertEquals(145.0, basket.calculate());
+    }
+
     @ParameterizedTest
     @MethodSource("provideBookCountsAndExpectedPrices")
     void distinctBooksReceiveDiscounts(int distinctBooksCount, double expectedPrice) {
