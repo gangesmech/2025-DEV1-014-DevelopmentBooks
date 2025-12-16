@@ -19,4 +19,12 @@ class ShoppingBasketTest {
         basket.add(new Book("Clean Code"));
         assertEquals(BOOK_PRICE, basket.calculate());
     }
+
+    @Test
+    void twoDifferentBooksDiscount() {
+        var basket = new ShoppingBasket();
+        basket.add(new Book("Clean Code"));
+        basket.add(new Book("The Clean Coder"));
+        assertEquals(95.0, basket.calculate());
+    }
 }
