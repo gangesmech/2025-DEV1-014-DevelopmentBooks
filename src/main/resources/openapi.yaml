@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: Development Books API
+  description: API for calculating the price of development books with discounts.
+  version: 1.0.0
+paths:
+  /books:
+    get:
+      summary: Retrieve all available books
+      operationId: getBooks
+      responses:
+        '200':
+          description: A list of available books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+  /price:
+    post:
+      summary: Calculate total price for a shopping basket
+      operationId: calculatePrice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: The calculated total price
+          content:
+            application/json:
+              schema:
+                type: number
+                format: double
+                example: 50.0
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the book
+          example: "Clean Code"
+        author:
+          type: string
+          description: The author of the book
+          example: "Robert C. Martin"
+        year:
+          type: integer
+          description: The year of publication
+          example: 2008
+      required:
+        - title
+        - author
+        - year
