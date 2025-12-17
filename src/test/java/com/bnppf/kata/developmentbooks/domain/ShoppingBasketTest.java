@@ -1,4 +1,4 @@
-package com.bnppf.kata.developmentbooks;
+package com.bnppf.kata.developmentbooks.domain;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,13 +12,6 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 class ShoppingBasketTest {
 
     private static final double BOOK_PRICE = 50.0;
-    private static final String[] BOOKS = {
-            "Clean Code",
-            "The Clean Coder",
-            "Clean Architecture",
-            "Test Driven Development by Example",
-            "Working Effectively with Legacy Code"
-    };
 
     @Test
     void emptyBasketDescription() {
@@ -29,38 +22,38 @@ class ShoppingBasketTest {
     @Test
     void singleBookCostsFifty() {
         var basket = new ShoppingBasket();
-        basket.add(new Book(BOOKS[0]));
+        basket.add(Book.CLEAN_CODE);
         assertEquals(BOOK_PRICE, basket.calculate());
     }
 
     @Test
     void twoDifferentBooksDiscount() {
         var basket = new ShoppingBasket();
-        basket.add(new Book(BOOKS[0]));
-        basket.add(new Book(BOOKS[1]));
+        basket.add(Book.CLEAN_CODE);
+        basket.add(Book.THE_CLEAN_CODER);
         assertEquals(95.0, basket.calculate());
     }
 
     @Test
     void twoDuplicateAndOneUniqueBook() {
         var basket = new ShoppingBasket();
-        basket.add(new Book(BOOKS[0]));
-        basket.add(new Book(BOOKS[1]));
-        basket.add(new Book(BOOKS[0]));
+        basket.add(Book.CLEAN_CODE);
+        basket.add(Book.THE_CLEAN_CODER);
+        basket.add(Book.CLEAN_CODE);
         assertEquals(145.0, basket.calculate());
     }
 
     @Test
     void optimalDiscountForMultipleSets() {
         var basket = new ShoppingBasket();
-        basket.add(new Book(BOOKS[0]));
-        basket.add(new Book(BOOKS[0]));
-        basket.add(new Book(BOOKS[1]));
-        basket.add(new Book(BOOKS[1]));
-        basket.add(new Book(BOOKS[2]));
-        basket.add(new Book(BOOKS[2]));
-        basket.add(new Book(BOOKS[3]));
-        basket.add(new Book(BOOKS[4]));
+        basket.add(Book.CLEAN_CODE);
+        basket.add(Book.CLEAN_CODE);
+        basket.add(Book.THE_CLEAN_CODER);
+        basket.add(Book.THE_CLEAN_CODER);
+        basket.add(Book.CLEAN_ARCHITECTURE);
+        basket.add(Book.CLEAN_ARCHITECTURE);
+        basket.add(Book.TEST_DRIVEN_DEVELOPMENT);
+        basket.add(Book.LEGACY_CODE);
         assertEquals(320.0, basket.calculate());
     }
 
@@ -69,7 +62,7 @@ class ShoppingBasketTest {
     void distinctBooksReceiveDiscounts(int distinctBooksCount, double expectedPrice) {
         var basket = new ShoppingBasket();
         IntStream.range(0, distinctBooksCount)
-                .mapToObj(i -> new Book(BOOKS[i]))
+                .mapToObj(i -> Book.values()[i])
                 .forEach(basket::add);
         assertEquals(expectedPrice, basket.calculate());
     }

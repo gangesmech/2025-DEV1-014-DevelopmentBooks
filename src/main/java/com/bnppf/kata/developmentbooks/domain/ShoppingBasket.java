@@ -1,4 +1,4 @@
-package com.bnppf.kata.developmentbooks;
+package com.bnppf.kata.developmentbooks.domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
