@@ -13,18 +13,26 @@ import java.util.List;
 public class DevelopmentBooksController {
 
     private final PricingService pricingService;
+    private final com.bnppf.kata.developmentbooks.mapper.BookMapper bookMapper;
 
-    public DevelopmentBooksController(PricingService pricingService) {
+    public DevelopmentBooksController(PricingService pricingService,
+            com.bnppf.kata.developmentbooks.mapper.BookMapper bookMapper) {
         this.pricingService = pricingService;
+        this.bookMapper = bookMapper;
     }
 
     @GetMapping("/books")
-    public List<Book> getBooks() {
-        return pricingService.getBooks();
+    public List<com.bnppf.kata.developmentbooks.model.Book> getBooks() {
+        return pricingService.getBooks().stream()
+                .map(bookMapper::toModel)
+                .toList();
     }
 
     @PostMapping("/price")
-    public double calculatePrice(@RequestBody List<Book> books) {
-        return pricingService.calculatePrice(books);
+    public double calculatePrice(@RequestBody List<com.bnppf.kata.developmentbooks.model.Book> books) {
+        var domainBooks = books.stream()
+                .map(bookMapper::toDomain)
+                .toList();
+        return pricingService.calculatePrice(domainBooks);
     }
 }
