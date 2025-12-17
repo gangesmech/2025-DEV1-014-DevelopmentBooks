@@ -91,6 +91,13 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version>
+				<configuration>
+					<excludes>
+						<exclude>**/DevelopmentBooksApplication.class</exclude>
+						<exclude>**/model/**</exclude>
+						<exclude>**/mapper/*Impl.class</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -110,10 +117,6 @@
 							<goal>check</goal>
 						</goals>
 						<configuration>
-							<excludes>
-								<exclude>**/DevelopmentBooksApplication.class</exclude>
-								<exclude>**/model/**</exclude>
-							</excludes>
 							<rules>
 								<rule>
 									<element>BUNDLE</element>
