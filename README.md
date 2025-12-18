@@ -26,6 +26,16 @@ mvn test
 mvn clean install
 ```
 
+## Commit Message Style
+This project follows the **[Udacity Git Commit Message Style Guide](https://udacity.github.io/git-styleguide/)**.
+Commits are structured as `<type>: <subject>`, using the imperative mood (e.g., `feat: Add new pricing logic`).
+
+Common types used:
+- `feat`: New feature
+- `docs`: Documentation changes
+- `chore`: Maintenance tasks
+- `refactor`: Code refactoring
+
 ## TDD Approach
 The solution was strictly built using the Red-Green-Refactor cycle:
 1.  **Red:** Write a failing test for a small slice of functionality (e.g., empty basket, single book, simple discount).
@@ -36,7 +46,7 @@ The solution was strictly built using the Red-Green-Refactor cycle:
 ## Design Decisions
 
 ### 1. Domain Model (`com.bnppf.kata.developmentbooks.domain`)
--   **`Book` Enum:** Used instead of Strings to ensure type safety and restrict inputs to the 5 valid titles.
+-   **`Book` Record:** To align with OpenAPI-generated models and support easier mapping while maintaining immutability.
 -   **`ShoppingBasket`:** Encapsulates the core pricing logic. It maintains the state of selected books and exposes a `calculate()` method.
 
 ### 2. Pricing Algorithm
@@ -51,3 +61,54 @@ The solution was strictly built using the Red-Green-Refactor cycle:
 ## Code Coverage
 JaCoCo is configured to enforce a **minimum of 90% instruction coverage**. The build will fail if this threshold is not met.
 **Report Location:** `target/site/jacoco/index.html`
+
+## API Reference
+
+### 1. Get Available Books
+Retrieves a list of all 5 Development Books available for purchase.
+
+- **URL:** `/books`
+- **Method:** `GET`
+- **Success Response:**
+  - **Code:** 200 OK
+  - **Content:**
+    ```json
+    [
+      {
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "year": 2008
+      },
+      {
+        "title": "The Clean Coder",
+        "author": "Robert C. Martin",
+        "year": 2011
+      }
+      // ... other books
+    ]
+    ```
+
+### 2. Calculate Price
+Calculates the lowest possible price for a submitted list of books, applying all discount rules optimally.
+
+- **URL:** `/price`
+- **Method:** `POST`
+- **Request Body:**
+  - A list of book objects (structure matching the `GET /books` response).
+  ```json
+  [
+    {
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "year": 2008
+    },
+    {
+      "title": "The Clean Coder",
+      "author": "Robert C. Martin",
+      "year": 2011
+    }
+  ]
+  ```
+- **Success Response:**
+  - **Code:** 200 OK
+  - **Content:** `95.0` (Price as a double)
